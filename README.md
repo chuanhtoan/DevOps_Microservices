@@ -2,9 +2,7 @@
 
 ## Project Overview
 
-In this project, you will apply the skills you have acquired in this course to operationalize a Machine Learning Microservice API.
-
-You are given a pre-trained, `sklearn` model that has been trained to predict housing prices in Boston according to several features, such as average rooms in a home and data about highway access, teacher-to-pupil ratios, and so on. You can read more about the data, which was initially taken from Kaggle, on [the data source site](https://www.kaggle.com/c/boston-housing). This project tests your ability to operationalize a Python flask app—in a provided file, `app.py`—that serves out predictions (inference) about housing prices through API calls. This project could be extended to any pre-trained machine learning model, such as those for image recognition and data labeling.
+This project using sklearn model to predict housing prices in Boston according to several features, such as average rooms in a home and data about highway access. It's using CircleCI to deploy a Python flask app to prodives predictions through API calls.
 
 ### Project Tasks
 
@@ -47,7 +45,45 @@ source .devops/bin/activate
 
 ### Kubernetes Steps
 
-- Setup and Configure Docker locally
-- Setup and Configure Kubernetes locally
-- Create Flask app in Container
-- Run via kubectl
+You should be in your virtual machine first
+
+1. Setup and Configure Docker locally
+
+   - You should have wsl2 first:
+     wsl --install
+     wsl --update
+     wsl --set-default-version 2
+
+   - You can douwnload Docker Desktop for Windows here:
+     https://docs.docker.com/desktop/install/windows-install/
+
+2. Setup and Configure Minikube locally
+
+   - Download and setup
+     New-Item -Path 'c:\' -Name 'minikube' -ItemType Directory -Force
+     Invoke-WebRequest -OutFile 'c:\minikube\minikube.exe' -Uri 'https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe' -UseBasicParsing
+
+   - Add Minikube to PATH:
+     $oldPath = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::Machine)
+        if ($oldPath.Split(';') -inotcontains 'C:\minikube') {
+     [Environment]::SetEnvironmentVariable('Path', $('{0};C:\minikube' -f $oldPath), [EnvironmentVariableTarget]::Machine)
+     }
+
+   - Minikube start
+
+3. Install dependencies using make
+
+   - npm install make -g
+   - make all
+
+4. Setup and Configure Kubernetes locally
+
+   - You can download it using curl:
+     curl.exe -LO "https://dl.k8s.io/release/v1.28.2/bin/windows/amd64/kubectl.exe"
+
+5. Running script files
+
+   - ./run_docker.sh
+   - ./run_kubernetes.sh
+   - ./upload_docker.sh
+   - ./make_prediction.sh
